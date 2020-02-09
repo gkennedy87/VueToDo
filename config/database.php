@@ -1,12 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-$url = parse_url(getenv("postgres://pbhskajjgpkxzy:04f4527d05f15147f7ecd589277b4158ced702bc7a2c029f5e799812a5134493@ec2-184-72-235-159.compute-1.amazonaws.com:5432/d489mea7uua3kh"));
-
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+$DATABASE_URL= parse_url(getenv("postgres://pbhskajjgpkxzy:04f4527d05f15147f7ecd589277b4158ced702bc7a2c029f5e799812a5134493@ec2-184-72-235-159.compute-1.amazonaws.com:5432/d489mea7uua3kh"));
 return [
 
     /*
@@ -70,14 +65,16 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host'     => $host,
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
+            'url' => env('DATABASE_URL'),
+            'host' => $DATABASE_URL["host"],
+            'port' => $DATABASE_URL["port"],
+            'database' => ltrim($DATABASE_URL["path"], "/"),
+            'username' => $DATABASE_URL["user"],
+            'password' => $DATABASE_URL["pass"],
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
-            'sslmode' => 'require',
+            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [
